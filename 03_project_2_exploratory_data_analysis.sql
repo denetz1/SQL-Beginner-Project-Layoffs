@@ -1,4 +1,4 @@
-# MySQL Bootcamp-Project 2: Exploratory Data Analysis in SQL 14.08.2024
+# MySQL Bootcamp-Project 2: Exploratory Data Analysis in SQL
 -- -------------------------------------------------------------------------------------
 
 # First, I want to look up the complete dataset
