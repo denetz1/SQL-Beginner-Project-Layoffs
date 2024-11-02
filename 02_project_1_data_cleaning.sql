@@ -1,14 +1,14 @@
 # MySQL Bootcamp-Project 1: Data cleaning in SQL 
 -- -------------------------------------------------------------------------------------
-# Step 1: Create a new database
-# In this tutorial this is not done by query, but we imported a csv-Excel file called "layoffs"
+# Create a new database
+# In this tutorial this is not done by query, but we imported a .csv file.
 
 USE world_layoffs;
 SELECT*
 FROM layoffs;
 
 # Steps for data cleaning: 
--- 0. Create staging dataset (we do not want to changee the raw dataset, so we keep all the information, in case we make a mistake)
+-- 0. Create staging dataset
 -- 1. Remove duplicates
 -- 2. Standardize data 
 -- 3. Dealing with NULL values or blank salues
@@ -87,11 +87,11 @@ DROP COLUMN row_num;
 -- -------------------------------------------------------------------------------------
 # Step 2: Standardizing Data
 
-# Now I look at the columns ans search for errors
+# Now I look at the columns and search for errors
 SELECT DISTINCT company
 FROM layoffs_staging2;
 
-# I find that some have spaces in front or at the end, so I test my intended update first:  
+# I find that some entries have spaces in front or at the end, so I test my intended update first:  
 SELECT company, TRIM(company)
 FROM layoffs_staging2;
 # And then UPDATE the dataset accordingly
@@ -103,7 +103,7 @@ SELECT DISTINCT industry
 FROM layoffs_staging2
 ORDER BY 1;
 
-# In the industry column there is "crypto", "cryptoCurrency" and "Crypto Currency" which should be identical
+# In the industry column there are entries containing "crypto", "cryptoCurrency" and "Crypto Currency" which should be identical
 SELECT*
 FROM layoffs_staging2
 WHERE industry LIKE 'Crypto%';
@@ -117,8 +117,8 @@ SELECT DISTINCT country
 FROM layoffs_staging2
 ORDER BY 1;
 
-# I found that the United States have two entrys, because one entry has a period at the end. 
-# So I write a query that trims all periods from the entrys 
+# I found that the United States have two entries, because one entry has a period at the end. 
+# So I write a query that trims all periods from the entries 
 SELECT DISTINCT country, TRIM(TRAILING '.' FROM country)
 FROM layoffs_staging2
 ORDER BY 1; 
@@ -140,7 +140,7 @@ SET `date`= STR_TO_DATE(`date`, '%m/%d/%Y');
 SELECT `date`
 FROM layoffs_staging2;
 
-# Now we have the correct format and only need to change the datatype next 
+# Now I have the correct format and only need to change the datatype next 
 ALTER TABLE layoffs_staging2
 MODIFY COLUMN `date` DATE; 
 
@@ -152,7 +152,7 @@ FROM layoffs_staging2
 WHERE industry IS NULL 
 OR industry = '';
 
-# We found 4 companys with blanks or NULLs in the Dataset. Because some companies have multiple entries we can check, 
+# I found 4 companys with blanks or NULLs in the Dataset. Because some companies have multiple entries I can check, 
 # if other entries contain the industry of the company
 
 SELECT *
@@ -192,7 +192,7 @@ AND t2.industry IS NOT NULL;
 # Step 4: Removing columns (and in this case entries) 
 
 # We now can cleanse the layoff dataset from information, we do not need. This next step is not required.
-# There are entrys in the "layoff" table, with companies, who had no layoffs and also have no percentage_laid_off. 
+# There are entries in the "layoff" dataset, with companies, which had no layoffs and also have no percentage_laid_off. 
 # Note: Deleting data is often not recommended but this next query serves as an example how to do it. 
 
 SELECT*
